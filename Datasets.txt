@@ -1,0 +1,17 @@
+The origin of each dataset:
+
+WA_Fn-UseC_-Telco-Customer-Churn.csv
+https://www.kaggle.com/datasets/blastchar/telco-customer-churn
+
+Churn_Modelling.csv
+https://www.kaggle.com/datasets/shubh0799/churn-modelling
+
+churn-bigml-20
+churn-bigml-80
+https://www.kaggle.com/datasets/mnassrib/telecom-churn-datasets?select=churn-bigml-80.csv
+
+Customertravel.csv
+https://www.kaggle.com/datasets/tejashvi14/tour-travels-customer-churn-prediction
+
+telecom_churn.csv
+https://www.kaggle.com/datasets/barun2104/telecom-churn

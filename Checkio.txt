@@ -1,0 +1,67 @@
+from collections import Counter
+def checkio(data: list) -> list:
+    cnt = Counter(data)
+    uniques = []
+    for x in data:
+        if cnt[x]==1:
+            uniques.append(x)      
+    return [x for x in data if x not in uniques]  
+
+
+def remove_min_max(data: set[int], total: int) -> set[int]:
+    # your code here
+    tmp = list(data)
+    if len(tmp)==0 or len(tmp)==1 or len(tmp)<=2*total:
+        return set()
+    else:
+        for _ in range(total):
+                tmp.pop(tmp.index(max(tmp)))
+                tmp.pop(tmp.index(min(tmp)))
+        return set(tmp)
+
+def sum_numbers(text: str) -> int:
+    tmp_ = text.split(" ")
+    sum_=0
+    for x in tmp_:
+        if x.isdigit():
+            sum_+=int(x)  
+    return sum_
+
+
+def checkio(values: list) -> list:
+    negative_values = list(filter(lambda x : x<=0, values))
+    sorted_values = sorted([abs(x) for x in values])
+    
+    for i, x in enumerate(sorted_values):
+        if -x in negative_values:
+            sorted_values[i]=-x
+          
+    return sorted_values
+
+
+
+def between_markers(text: str, begin: str, end: str) -> str:
+    """
+        returns substring between two given markers
+    """
+    bt_markers=""
+    tmp_ = text.split(" ")
+    for x in tmp_:
+        if begin in x or end in x:
+            bt_markers+=x.strip(begin+end)
+    return tmp_ # bt_markers
+
+
+from collections import Counter
+import operator
+def checkio(text: str) -> str:
+
+    #replace this for solution
+    tmp_ = [x for x in [*text.lower()] if x not in [" ", ".", ",", "?", "!"]]
+    cnt_ = Counter(tmp_)
+    
+    max_val = max(cnt_.items(), key=operator.itemgetter(1))[1]
+    max_dict = {k:v for k,v in cnt_.items() if v== max_val}
+    res_ = sorted(max_dict)[0]
+    return res_
+    #max_dict, max_val, sorted(max_dict)
