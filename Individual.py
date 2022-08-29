@@ -92,7 +92,7 @@ class Individual:
         f1_score = metrics.f1_score(y_test, y_pred_test, average='macro')
         self.fitness = f1_score            
         
-    # In this case we are just getting the Euclidien distance:
+    # In this case we are just getting the Euclidean distance:
     # Maybe we can return some other type of distance, but let see.     
     def distance(self, other):
         """
@@ -100,18 +100,18 @@ class Individual:
         dist = np.abs(self.fitness - other.fitness)
         return dist
 
-    @property
-    def fitness(self):
-        return self.fitness
+    # @property
+    # def fitness(self):
+    #     return self.fitness
     
-    @fitness.setter
-    def fitness(self, f):
-        self.fitness = f
+    # @fitness.setter
+    # def fitness(self, f):
+    #     self.fitness = f
         
-    @property
-    def model(self):
-        return self.model
+    # @property
+    # def model(self):
+    #     return self.model
     
-    @model.setter
-    def model(self, m):
-        self.model = m
+    # @model.setter
+    # def model(self, m):
+    #     self.model = m

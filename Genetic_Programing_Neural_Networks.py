@@ -10,33 +10,35 @@ d = {"layer_layout": np.random.choice(HIDDEN_LAYER_COUNT)*[LayerLayout()],
 "optimizer":np.random.choice(MODEL_OPTIMIZER),
 "loss":np.random.choice(MODEL_LOSS)}
 
-# Here I am testing all the method of idividual
-indiv1 = Individual(**d)
-indiv2 = Individual(**d)
-# indiv2 = deepcopy(indiv1)
+
+
+# Here I am testing all the method of individuals
+# indiv1 = Individual(**d)
+# indiv2 = Individual(**d)
+# # indiv2 = deepcopy(indiv1)
+# # print(indiv1)
+# # print(indiv2)
+# indiv1.generate_model(x_train, y_train)
 # print(indiv1)
+# indiv1.calculate_fitness(x_test, y_test)
+# print(indiv1)
+# indiv1=mutate_individual(indiv1) # working
+# print("The mutation happens here")
+# print(indiv1)
+# print("The cross over happens here")
+# indiv1, indiv2 = generate_children(indiv1, indiv2)
+# print(indiv1)
+# print("~~~~~")
 # print(indiv2)
-indiv1.generate_model(x_train, y_train)
-print(indiv1)
-indiv1.calculate_fitness(x_test, y_test)
-print(indiv1)
-indiv1.mutate_individual() # working
-print("The mutation happens here")
-print(indiv1)
-print("The cross over happens here")
-indiv1.generate_children(indiv2)
-print(indiv1)
-print("~~~~~")
-print(indiv2)
 
 ###############################################################################
-# d = {"size": SIZE,
-#      "optim": OPTIM,
-#      "x_train": x_train,
-#      "y_train": y_train,
-#      "x_test": x_test,
-#      "y_test": y_test}
-#
+d = {"size": SIZE,
+     "optim": OPTIM,
+     "x_train": x_train,
+     "y_train": y_train,
+     "x_test": x_test,
+     "y_test": y_test}
+
 # print("Testing the population here:")
 # pool1 = Pool(**d)
 # print(pool1)
@@ -51,13 +53,17 @@ print(indiv2)
 # pool1.evolve(True, False)
 # print(pool1.best_fitness_over_generations)
 # print(pool1.mean_fitness_over_generations)
-# # pool2.evolve(True,True)
+# pool2.evolve(True,True)
 
 ###############################################################################
 
 
 def genetic_algorithm_plot(kwargs):
     """
+    The function takes in a dictionary of arguments and returns a plot of the evolution of the fitness
+    of the population with and without elitism
+    
+    :param kwargs: a dictionary of parameters for the Pool class
     """
     pop1 = Pool(**kwargs)
     pop2 = deepcopy(pop1)
@@ -79,16 +85,16 @@ def genetic_algorithm_plot(kwargs):
     ax[1].grid(axis='both', linestyle='--', color="#add8e6")
     ax[1].legend(loc="best")
     ax[1].set_ylabel('Distance')
-    ax[1].set_title("Best Fitnes")
+    ax[1].set_title("Best Fitness")
 
-    fig.suptitle("The evolution of the Fitness by generations")
+    plt.title("The evolution of the Fitness by generations")
     plt.show()
 
 
 # ###############################################################################
 # print("\n********** Genetic Algorithm **********")
 
-# geneticAlgorithmPlot(d)
+genetic_algorithm_plot(d)
 
 # pop = Population(**d)
 # print(pop)

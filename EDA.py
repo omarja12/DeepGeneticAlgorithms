@@ -5,55 +5,41 @@ Created on Wed Jul 27 16:23:31 2022
 @author: user
 """
  
+import csv
 import os
 import random
-import csv
-import time
-import random
-from random import shuffle, choice, sample, uniform
-from operator import add, attrgetter
-from tqdm import tqdm
-from functools import reduce
-from copy import deepcopy
-import pandas as pd
-import numpy as np
-import tensorflow as tf
-import time
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, InputLayer
-from keras import backend as K
-
-import numpy as np
 import random as python_random
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import time
+from copy import deepcopy
+from functools import reduce
+from operator import add, attrgetter
+from random import choice, sample, shuffle, uniform
 
-import tensorflow as tf
-from tensorflow import keras
-import keras_tuner as kt
+import IPython
 import keras.backend as K
-
+import keras_tuner as kt
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import shap
+import tensorflow as tf
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import NearMiss
-
-from keras.models import Sequential
+from keras import backend as K
 from keras import layers
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-
-from sklearn.ensemble import IsolationForest
-from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.feature_selection import mutual_info_classif, f_classif
-from sklearn.utils import class_weight
-
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from keras.layers import Dense, Dropout, InputLayer
+from keras.models import Sequential
 from sklearn import metrics
-from sklearn.metrics import classification_report, roc_curve, auc
-
-import shap
-
-from operator import add
-import IPython
+from sklearn.ensemble import IsolationForest
+from sklearn.feature_selection import f_classif, mutual_info_classif
+from sklearn.metrics import auc, classification_report, roc_curve
+from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.utils import class_weight
+from tensorflow import keras
+from tqdm import tqdm
 
 # Defining the seed
 SEED = 2022
@@ -80,9 +66,9 @@ MODEL_LOSS=[tf.keras.losses.BinaryCrossentropy(),
 
 # Define Genetic Algorithm Parameters
 # Max Number of Generations to Apply the Genetic Algorithm
-GENERATIONS = 2 
+GENERATIONS = 5 
 # Max Number of Individuals in Each Population
-SIZE = 10  
+SIZE = 12  
 # Number of Best Candidates to Use 
 ELITE_SIZE = 2  
 # 

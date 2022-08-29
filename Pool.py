@@ -5,12 +5,13 @@ Created on Sun Aug 14 16:49:20 2022
 @author: Omar Ja
 """
 
+from Crossover import *
 from EDA import *
 from Individual import *
 from LayerLayout import *
-from Selections import * 
-from Crossover import *
 from Mutation import *
+from Selections import *
+
 
 class Pool:
     
@@ -27,7 +28,7 @@ class Pool:
         self.individuals = []
         self.best_fitness_over_generations = []
         self.mean_fitness_over_generations = []
-        self.sd_fitness_over_genearations = []
+        self.sd_fitness_over_generations = []
         self.current_generation = 1
         self.best_fitness = None
         self.mean_fitness = None
@@ -62,6 +63,11 @@ class Pool:
     
     def __getitem__(self, ind):
         """
+        If the index is within the range of the list, return the individual at that index. Otherwise, raise
+        an error
+        
+        :param ind: the index of the individual you want to get
+        :return: The individual at the index ind.
         """
         if len(self.individuals) > ind:
             return self.individuals[ind]
@@ -69,18 +75,26 @@ class Pool:
             raise IndexError("index out of range")
 
     def __len__(self):
+        """
+        The function returns the length of the list of individuals.
+        :return: The length of the list of individuals.
+        """
         return len(self.individuals)
     
     
     def fitnesses_statistics(self):
         """
+        It calculates the mean, standard deviation, and best fitness of the population
+        :return: The best fitness, mean fitness, and standard deviation of fitness.
+        """
+        """
         """
         mean_fitness = np.mean([individual.fitness for individual in self.individuals])
         sd_fitness = np.std([individual.fitness for individual in self.individuals])
         if self.optim == "max":
-            best_fitness = max(self.individuals, key=attrgetter("fitness")) 
+            best_fitness = max(self.individuals, key=attrgetter("fitness")).fitness 
         elif self.optim == "min":
-            best_fitness = min(self.individuals, key=attrgetter("fitness"))
+            best_fitness = min(self.individuals, key=attrgetter("fitness")).fitness
         else:
             raise Exception("No optimization type specified")
                 
@@ -108,10 +122,10 @@ class Pool:
         for individual in self.individuals:
             individual.generate_model(self.x_train, self.y_train)
                  
-    def evaluate(self):
+    def evaluate(self, population):
         """
         """
-        for individual in self.individuals:
+        for individual in population:
             
             # individual.ml_model is assigned here
             individual.generate_model(self.x_train, self.y_train)
@@ -121,14 +135,14 @@ class Pool:
             
         # Sort individuals by fitness
         if self.optim == "max":
-            self.individuals.sort(key=attrgetter("fitness"), reverse=True)
+            population.sort(key=attrgetter("fitness"), reverse=True)
     
         elif self.optim == "min":
-            self.individuals.sort(key=attrgetter("fitness"))
+            population.sort(key=attrgetter("fitness"))
         else:
             raise Exception("No optimization type specified")
-        
-        self.fitnesses_statistics()
+       
+        return population
             
     # Also known as fitness scaling:
     # The issue here is that i think the distance will always be equal to 0
@@ -154,21 +168,28 @@ class Pool:
         
     def evolve(self, elitism, fitness_sharing, generations=GENERATIONS):
         """
-        """            
+        > Evolve the population for a given number of generations, using elitism and fitness sharing
         
+        :param elitism: the number of individuals to keep from one generation to the next
+        :param fitness_sharing: If True, the fitness of each individual is divided by the number of
+        individuals in its species
+        :param generations: The number of generations to evolve the population for
+        """
+                   
         for gen in tqdm(range(generations)):
             new_individuals = []
+            new_leftout_individuals = []
             leftout_individuals = self.individuals        
-            # Generate and evaluate the models.
-            self.evaluate()
+            if self.current_generation == 1:
+                # Generate and evaluate the models.
+                self.individuals = self.evaluate(self.individuals)
             # self.log(elitism)
             self.fitnesses_statistics()
             # Appending to list to be plot later
             self.best_fitness_over_generations.append(self.best_fitness)
             self.mean_fitness_over_generations.append(self.mean_fitness)
-            self.sd_fitness_over_genearations.append(self.sd_fitness) 
-            
-            
+            self.sd_fitness_over_generations.append(self.sd_fitness) 
+             
             # This is not working for now 
             if fitness_sharing == True:
                 self.fitness_sharing()
@@ -190,25 +211,20 @@ class Pool:
                 # Mutation                
                 offspring1 = mutate_individual(offspring1)  
                 offspring2 = mutate_individual(offspring2)
-                                        
-                new_individuals.append(offspring1)
-                if len(new_individuals) < self.size:
-                    new_individuals.append(offspring2)
-                                            
-            #if self.optim == "max":
-            #    new_pop.sort(key=lambda x: x.fitness, reverse=True)
-            #elif self.optim == "min":
-            #    new_pop.sort(key=lambda x: x.fitness)
-            # else:
-            #     raise Exception("No optimization type specified")
+
+                new_leftout_individuals.append(offspring1)                        
+                if len(new_leftout_individuals) < len(leftout_individuals):
+                    new_leftout_individuals.append(offspring2)
+
+                                                  
             
+            new_leftout_individuals = self.evaluate(new_leftout_individuals)
+            new_individuals.extend(new_leftout_individuals)
             self.individuals = new_individuals
-            self.evaluate()
-            
             self.current_generation +=1
-            
+            self.fitnesses_statistics()            
             # I can only run this after using evaluate.
-            # Do I really need this as the evalaute fct already sort the population
+            # Do I really need this as the evaluate fct already sort the population
             # if self.optim == "max":
             #     best_individual = max(self.individuals, key=lambda x: x.fitness)
             # if self.optim == "min":
@@ -224,7 +240,7 @@ class Pool:
                 break
             
         return(self.best_fitness, self.best_fitness_over_generations,
-               self.mean_fitness_over_generations, self.sd_fitness_over_genearations)
+               self.mean_fitness_over_generations, self.sd_fitness_over_generations)
         
     def log(self, elitism):
         if self.optim == "max":
@@ -259,26 +275,26 @@ class Pool:
                 self.dataframe.to_csv(f'Elitism{self.timestamp}.csv', mode='w', index=False, header=True)  
     
     
-    @property
-    def best_fitness(self):
-        return self.best_fitness
+    # @property
+    # def best_fitness(self):
+    #     return self.best_fitness
     
-    @best_fitness.setter
-    def best_fitness(self, bf):
-        self.best_fitness = bf
+    # @best_fitness.setter
+    # def best_fitness(self, bf):
+    #     self.best_fitness = bf
         
-    @property
-    def mean_fitness(self):
-        return self.mean_fitness
+    # @property
+    # def mean_fitness(self):
+    #     return self.mean_fitness
 
-    @mean_fitness.setter
-    def mean_fitness(self, mf):
-        self.mean_fitness = mf
+    # @mean_fitness.setter
+    # def mean_fitness(self, mf):
+    #     self.mean_fitness = mf
         
-    @property
-    def sd_fitness(self):
-        return self.sd_fitness
+    # @property
+    # def sd_fitness(self):
+    #     return self.sd_fitness
     
-    @sd_fitness.setter
-    def sd_fitness(self, sf):
-        self.sd_fitness = sf
+    # @sd_fitness.setter
+    # def sd_fitness(self, sf):
+    #     self.sd_fitness = sf
