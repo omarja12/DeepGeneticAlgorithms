@@ -66,7 +66,7 @@ MODEL_LOSS=[tf.keras.losses.BinaryCrossentropy(),
 
 # Define Genetic Algorithm Parameters
 # Max Number of Generations to Apply the Genetic Algorithm
-GENERATIONS = 5 
+GENERATIONS = 20
 # Max Number of Individuals in Each Population
 SIZE = 12  
 # Number of Best Candidates to Use 

@@ -175,8 +175,8 @@ class Pool:
         individuals in its species
         :param generations: The number of generations to evolve the population for
         """
-                   
-        for gen in tqdm(range(generations)):
+                  
+        for gen in range(generations):
             new_individuals = []
             new_leftout_individuals = []
             leftout_individuals = self.individuals        

@@ -71,11 +71,13 @@ def genetic_algorithm_plot(kwargs):
     tmp2 = pop2.evolve(True, False)
 
     fig, ax = plt.subplots(nrows=2, ncols=1, sharex=True)
-    ax[0].plot(range(1, len(tmp1[2])+1), tmp1[2], '-b', label='No Elitism')
-    ax[0].plot(range(1, len(tmp2[2])+1), tmp2[2], '-g', label='Elitism')
+    ax[0].plot(range(1, len(tmp1[2])+1), tmp1[1], '-g', label='best fitness')
+    ax[0].plot(range(1, len(tmp1[2])+1), tmp1[2], '-b', label='mean fitness')
+    
 
-    ax[1].plot(range(1, len(tmp1[1])+1), tmp1[1], '-b', label='No Elitism')
-    ax[1].plot(range(1, len(tmp2[1])+1), tmp2[1], '-g', label='Elitism')
+    ax[1].plot(range(1, len(tmp2[1])+1), tmp2[1], '-g', label='best fitness')
+    ax[1].plot(range(1, len(tmp2[1])+1), tmp2[2], '-b', label='mean fitness')
+    
 
     ax[0].grid(axis='both', linestyle='--', color="#add8e6")
     ax[0].legend(loc="best")

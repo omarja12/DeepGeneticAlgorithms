@@ -8,6 +8,7 @@ Created on Sun Aug 14 16:44:43 2022
 from EDA import *
 from LayerLayout import *
 
+
 class Individual:
     """
     Individual Class
